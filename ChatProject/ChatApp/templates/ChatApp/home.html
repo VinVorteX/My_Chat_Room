@@ -1,0 +1,183 @@
+<!-- templates/ChatApp/home.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat App - Home</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <style>
+        /* General styles */
+ 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f2f5; /* Light gray background */ 
+    {% comment %} width:90%; {% endcomment %}
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column; 
+    height:100vh;
+    background-image:url("https://imgs.search.brave.com/kF32Ux9kLSE9imzEA922mXs3GhXm330Y6h9oWuP3yt0/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE1LzYx/LzIzLzE1NjEyMzE0/MjlkMmYxNjdiMzhl/YjhjMDg4Yzk1MGQ4/LmpwZw");
+}
+
+h1 {
+    color: #333; /* Dark gray for primary headings */
+    text-align: center;
+    margin: 40px 0 20px 0;
+}
+
+h2 {
+    color: #555; /* Medium gray for secondary headings */
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Link styles */
+a {
+    color: #3498db; /* Vibrant blue for links */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out; /* Smooth hover effects */
+}
+
+a:hover {
+    color: #2980b9; /* Darker blue on hover */
+    text-decoration: underline;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+form input {
+    padding: 10px;
+    margin: 10px;
+    width: 200px; /* Fixed width for uniformity */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+form input:focus {
+    border-color: #3498db; /* Highlight border on focus */
+}
+
+button {
+    background-color: #3498db; /* Blue background */
+    color: black; /* White text */
+    border: none;
+    padding: 12px 24px; /* Larger padding for better touch response */
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out; /* Smooth transitions */
+}
+
+button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+/* List styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color:black;
+}
+
+ul li {
+    width: 100%;
+    max-width: 400px; /* Restricting max width for better alignment */
+    margin: 10px 0;
+    color:black;
+}
+
+ul li a {
+    display: block;
+    padding: 12px 24px; /* Consistent padding */
+    background-color: white; /* White background */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px;
+    text-align: center; /* Center text */
+    transition: all 0.3s ease-in-out;
+    color:black;  
+    text-decoration:none;
+}
+a{
+    color:black;
+}
+#box{ 
+    border:2px solid black;
+    padding:50px;
+    border-radius:10px;
+    backdrop-filter:blur(10px);
+}
+
+ul li a:hover {
+    background-color: #f1f1f1; /* Light gray on hover */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    form {
+        flex-direction: column;
+    }
+
+    form input {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    ul {
+        flex-direction: column;
+    }
+
+    ul li {
+        width: 90%; /* Adjusting width for mobile screens */
+    }
+}
+
+    </style>
+
+</head>
+<body>
+    <div id="box">
+    <h1>Welcome to the Chat App</h1>
+    
+    <h2>Join an existing room</h2>
+    <form method="GET" action="{% url 'room' room_name='some_room' %}">
+        <br>
+        {% for room in rooms %}
+        <p>{{room.name}}</p>
+        <button type="submit">
+            {% comment %} {% for room in rooms %} {% endcomment %}
+            <li>
+                {% comment %} <p>{{room.name}}</p> {% endcomment %}
+                <a href="{% url 'room' room_name=room.name %}">Join Room</a>
+                {% comment %} <p>{{room.name}}</p> {% endcomment %}
+            </li>
+        {% comment %} {% endfor %} {% endcomment %}
+        </button>
+        <br>
+        <br>
+        {% endfor %}
+        
+    </form>
+</div>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

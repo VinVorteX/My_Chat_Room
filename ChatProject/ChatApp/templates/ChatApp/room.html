@@ -1,0 +1,94 @@
+<!-- templates/ChatApp/room.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room - {{ room.name }}</title>
+    <!-- Add CSS files, JavaScript libraries, etc., if needed -->
+<style>
+    body{ 
+        display: flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center; 
+        width:90%;
+        background-image:url("https://imgs.search.brave.com/PR4RzrwNX2zYrcJkjPheES6SxB5S1wlQViHYfuO6iSk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzg4LzU3/LzBlLzg4NTcwZTUw/MDMxMjgyMGNmODg3/M2QxODBkMDVmMGMw/LmpwZw");
+    }
+    #box{
+        border:2px solid red;
+        padding:30px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:space-around;
+        height:60vh ;
+        border-radius:10px;
+        backdrop-filter: blur(5px);
+    }
+    h1{
+        font-size:"2px"
+    }
+    li{
+        list-decoration:none;
+    }
+</style>
+</head>
+<body>
+    <div id="box">
+    <h1>Welcome to {{ room.name }} Chat Room</h1>
+    
+    <!-- Display a list of messages in the room -->
+    <div id="message-list">
+        <ul>
+            {% for message in room.message_set.all %}
+                <li><strong>{{ message.user }}:</strong> {{ message.value }} <small>({{ message.date }})</small></li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <!-- Form to send a new message -->
+    <form id="message-form" method="POST" action="{% url 'send' %}">
+        {% csrf_token %}
+        <input type="hidden" name="room_id" value="{{ room.id }}">
+        <label for="user">User:</label>
+        <input type="text" name="user" id="user" required>
+        
+        <label for="message">Message:</label>
+        <input type="text" name="message" id="message" required>
+        
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        // Optional: Handle message sending without reloading the page (AJAX)
+        document.getElementById('message-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from reloading the page
+
+            // Collect form data
+            const formData = new FormData(this);
+            
+            // Send the form data via AJAX
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Append the new message to the message list
+                    const messageList = document.getElementById('message-list');
+                    const newMessage = document.createElement('li');
+                    newMessage.innerHTML = `<strong>${formData.get('user')}:</strong> ${formData.get('message')}`;
+                    messageList.appendChild(newMessage);
+
+                    // Clear the message input
+                    document.getElementById('message').value = '';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        });
+    </div>
+    </script>
+</body>
+</html>
